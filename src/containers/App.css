@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  padding-top: 15%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.columns {
+  border:1px solid black;
+  width: 20%;
+  height: max(20rem);
+  background-color: lightgray;
+  display: grid;
+  grid-template-rows: repeat(5, 10%);
+  grid-template-columns: repeat(3, 10%);
+
+  align-content: center;
+  justify-content: center;
+}
