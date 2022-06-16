@@ -1,68 +1,64 @@
+import React, {useState} from 'react'; 
 import NumPad from '../components/NumPad';
 import Display from '../components/Display';
 import './App.css';
-import React, { Component } from 'react'; 
 
-class App extends Component{
-  constructor(){
-    super();
-    this.state = {
-      input: 0,
-      result: 0,
-      operator: ""
+const App = () => {
+    const [input, setInput] = useState(0);
+    const [result, setResult] = useState(0);
+    const [operator, setOperator] = useState("");
+
+    const clickHandle = (event) => {
+        setInput(+input + event.target.value);
     }
-  }
-  handleClick = (event) => {
-    if(event.target.value === "CLEAR") {
-      this.setState({input: 0})
-      this.setState({result: 0})
-      this.setState({operator: ""})
-
-    } else if(event.target.value === "=") {
-        if(this.state.operator === "+"){
-        this.setState({input: 0})
-        this.setState({result: +this.state.result + +this.state.input})
-        this.setState({operator: ""})
-      }
-      else if(this.state.operator === "-") {
-        this.setState({input: 0})
-        this.setState({result: +this.state.result - +this.state.input})
-        this.setState({operator: ""})
-      }
-    }           
-    else if (event.target.value === "+") {   
-      this.setState({operator: '+'})  
-      this.setState({input: 0})
-      this.setState({result: +this.state.input + +this.state.result})
-    } 
-    else if(event.target.value === "-") {
-      this.setState({operator: '-'})  
-      this.setState({input: 0})
-      this.setState({result:  +this.state.input - +this.state.result})
-    } 
-    else { 
-      if(this.state.input === 0){
-        this.setState({input: event.target.value})
-      }else{
-        this.setState({input: +this.state.input + event.target.value})
-      }
+    const sum = () => {
+        setOperator('+'); 
+        setInput(0);
+        setResult(+input + +result);
     }
-}
+    const sub = () => {
+        setOperator('-');  
+        setInput(0);
+        setResult(+input - +result);
+    }
+    const clear = () => {
+        setInput(0);
+        setResult(0);
+        setOperator("");
+    }
+    const equalSum = () => {
+        setInput(0);
+        setOperator("");
+        setResult(+result + +input);
+    }
+    const equalSub = () => {
+        setInput(0);
+        setOperator("");
+        setResult(+result - +input);
+    }
 
-  render(){
     return(
       <div className='container'>
           <Display 
-          text={this.state.input}
-          operator={this.state.operator}
-          result={this.state.result}
+          text={input}
+          operator={operator}
+          result={result}
           />
         <div className='columns'>
-          <NumPad clicks={this.handleClick}/>
+          <NumPad clicks={(event)=> {
+                            event.target.value === 'CLEAR' ? clear():
+                            event.target.value === '+' ? sum():
+                            event.target.value === '-' ? sub():
+                            event.target.value === '=' &&
+                            operator === "+"? equalSum():
+                            event.target.value === '=' &&
+                            operator === "-"? equalSub():
+                            clickHandle(event)
+                            }
+                        }/>
         </div>
       </div>
     );
-  }
 }
 
 export default App;
